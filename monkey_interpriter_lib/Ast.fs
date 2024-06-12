@@ -57,16 +57,15 @@ let orElse parser1 parser2 : Parser =
         | Error Failed -> parser2 tokens
         | Error FatalError -> Error FatalError
 
-let choice tokens : Parser= tokens |> List.reduce orElse
+let choice tokens : Parser = tokens |> List.reduce orElse
 
 
-let parse (tokens: Token seq) : Program = seq {
-    let enumerator = tokens |> Seq.pairwise |> _.GetEnumerator() //  last token will be end of file so it's ok it will never be in the current token
-    while enumerator.MoveNext() do
-        let x = enumerator|> choice [
-            parseLet
-            parseReturn
-        ]
+let parse (tokens: Token seq) : Program =
+    seq {
+        let enumerator = tokens |> Seq.pairwise |> _.GetEnumerator() //  last token will be end of file so it's ok it will never be in the current token
 
-        x
-}
+        while enumerator.MoveNext() do
+            let x = enumerator |> choice [ parseLet; parseReturn ]
+
+            x
+    }

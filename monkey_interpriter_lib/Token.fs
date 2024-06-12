@@ -133,37 +133,40 @@ module Lexer =
     let choice readers = readers |> List.reduce orElse
 
     let tokenizeKewwords: TokenReader =
-        choice
-            [ stringTokenizer "fn" FUNCTION
-              stringTokenizer "let" LET
-              stringTokenizer "true" TRUE
-              stringTokenizer "false" FALSE
-              stringTokenizer "if" IF
-              stringTokenizer "else" ELSE
-              stringTokenizer "return" RETURN ]
+        choice [
+            stringTokenizer "fn" FUNCTION
+            stringTokenizer "let" LET
+            stringTokenizer "true" TRUE
+            stringTokenizer "false" FALSE
+            stringTokenizer "if" IF
+            stringTokenizer "else" ELSE
+            stringTokenizer "return" RETURN
+        ]
 
 
     let tokenizOperators: TokenReader =
-        choice
-            [ stringTokenizer "==" EQ
-              stringTokenizer "!=" NOT_EQ
-              stringTokenizer "<=" LT_EQ
-              stringTokenizer ">=" GT_EQ
-              charTokenizer '=' ASSIGN
-              charTokenizer '+' PLUS
-              charTokenizer '-' MINUS
-              charTokenizer '!' BANG
-              charTokenizer '*' ASTERISK
-              charTokenizer '/' SLASH
-              charTokenizer '<' LT
-              charTokenizer '>' GT ]
+        choice [
+            stringTokenizer "==" EQ
+            stringTokenizer "!=" NOT_EQ
+            stringTokenizer "<=" LT_EQ
+            stringTokenizer ">=" GT_EQ
+            charTokenizer '=' ASSIGN
+            charTokenizer '+' PLUS
+            charTokenizer '-' MINUS
+            charTokenizer '!' BANG
+            charTokenizer '*' ASTERISK
+            charTokenizer '/' SLASH
+            charTokenizer '<' LT
+            charTokenizer '>' GT
+        ]
 
     let tokenizeParanse: TokenReader =
-        choice
-            [ charTokenizer '(' LPAREN
-              charTokenizer ')' RPAREN
-              charTokenizer '{' LBRACE
-              charTokenizer '}' RBRACE ]
+        choice [
+            charTokenizer '(' LPAREN
+            charTokenizer ')' RPAREN
+            charTokenizer '{' LBRACE
+            charTokenizer '}' RBRACE
+        ]
 
     let tokenizeDelimiter: TokenReader =
         choice [ charTokenizer ';' SEMICOLON; charTokenizer ',' COMMA ]
@@ -197,14 +200,15 @@ module Lexer =
         lexer |> readSpaces
 
         lexer
-        |> choice
-            [ tokenizeKewwords
-              tokenizOperators
-              tokenizeDelimiter
-              tokenizeParanse
-              tokenizeInt
-              tokenizeIdent
-              tokenizeEOF ]
+        |> choice [
+            tokenizeKewwords
+            tokenizOperators
+            tokenizeDelimiter
+            tokenizeParanse
+            tokenizeInt
+            tokenizeIdent
+            tokenizeEOF
+        ]
         |> Option.defaultValue ILLEGAL
 
     let tokenize input =
